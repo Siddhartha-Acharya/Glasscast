@@ -18,16 +18,18 @@ struct RootView: View {
     }
 
     var body: some View {
-        Group {
-            if authViewModel.isAuthenticated {
-                MainTabView(authViewModel: authViewModel)
-            } else {
-                AuthView(viewModel: authViewModel)
+        NavigationStack {
+            Group {
+                if authViewModel.isAuthenticated {
+                    MainTabView(authViewModel: authViewModel)
+                } else {
+                    AuthView(viewModel: authViewModel)
+                }
             }
+            .onAppear {
+                authViewModel.restoreSession()
+            }
+            .animation(.easeInOut, value: authViewModel.isAuthenticated)
         }
-        .onAppear {
-            authViewModel.restoreSession()
-        }
-        .animation(.easeInOut, value: authViewModel.isAuthenticated)
     }
 }
